@@ -1,26 +1,26 @@
-### NEED TO UPDATE THIS WITH MY OWN AGE KEYS
+### Updated this to my own sops key on 11/1/2022 - found on desktop VM
 ---
 creation_rules:
   - path_regex: cluster/.*\.sops\.ya?ml
     encrypted_regex: "^(data|stringData)$"
     key_groups:
       - age:
-          - age15uzrw396e67z9wdzsxzdk7ka0g2gr3l460e0slaea563zll3hdfqwqxdta
+          - age1rhc7lprjfcfl2uyjxcc0nny7h0ha0l7uykvah0vmcf2s7hecp94qupxyym
   - path_regex: cluster/.*\.sops\.ini
     key_groups:
       - age:
-          - age15uzrw396e67z9wdzsxzdk7ka0g2gr3l460e0slaea563zll3hdfqwqxdta
+          - age1rhc7lprjfcfl2uyjxcc0nny7h0ha0l7uykvah0vmcf2s7hecp94qupxyym
   - path_regex: cluster/.*\.sops\.toml
     key_groups:
       - age:
-          - age15uzrw396e67z9wdzsxzdk7ka0g2gr3l460e0slaea563zll3hdfqwqxdta
+          - age1rhc7lprjfcfl2uyjxcc0nny7h0ha0l7uykvah0vmcf2s7hecp94qupxyym
   - path_regex: ansible/.*\.sops\.ya?ml
     unencrypted_regex: "^(kind)$"
     key_groups:
       - age:
-          - age15uzrw396e67z9wdzsxzdk7ka0g2gr3l460e0slaea563zll3hdfqwqxdta
+          - age1rhc7lprjfcfl2uyjxcc0nny7h0ha0l7uykvah0vmcf2s7hecp94qupxyym
   - path_regex: terraform/.*\.sops\.ya?ml
     unencrypted_regex: "^(kind)$"
     key_groups:
       - age:
-          - age15uzrw396e67z9wdzsxzdk7ka0g2gr3l460e0slaea563zll3hdfqwqxdta
+          - age1rhc7lprjfcfl2uyjxcc0nny7h0ha0l7uykvah0vmcf2s7hecp94qupxyym

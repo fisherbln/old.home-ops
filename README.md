@@ -27,7 +27,7 @@ For provisioning the following tools will be used:
 - [Ansible](https://www.ansible.com) - Provision Fedora Server and install k3s
 - [Terraform](https://www.terraform.io) - Provision an already existing Cloudflare domain and certain DNS records to be used with your k3s cluster
 
-### ⚠️ pre-commit
+### ⚠️ pre-commit - check into the sops-pre-commit settings to make sure that is correct
 
 It is advisable to install [pre-commit](https://pre-commit.com/) and the pre-commit hooks that come with this repository.
 [sops-pre-commit](https://github.com/k8s-at-home/sops-pre-commit) will check to make sure you are not committing non-encrypted Kubernetes secrets to your repository.
@@ -42,3 +42,29 @@ It is advisable to install [pre-commit](https://pre-commit.com/) and the pre-com
 
     ```sh
     task precommit:update
+
+### 🔐 Setting up Age
+
+📍 Here we will create a Age Private and Public key. Using [SOPS](https://github.com/mozilla/sops) with [Age](https://github.com/FiloSottile/age) allows us to encrypt secrets and use them in Ansible, Terraform and Flux.
+
+1. Create a Age Private / Public Key
+
+    ```sh
+    age-keygen -o age.agekey
+    ```
+
+2. Set up the directory for the Age key and move the Age file to it
+
+    ```sh
+    mkdir -p ~/.config/sops/age
+    mv age.agekey ~/.config/sops/age/keys.txt
+    ```
+
+3. Export the `SOPS_AGE_KEY_FILE` variable in your `bashrc`, `zshrc` or `config.fish` and source it, e.g.
+
+    ```sh
+    export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
+    source ~/.bashrc
+    ```
+
+4. Fill out the Age public key in the `.sops.yaml` under each age key (if using different ones), **note** the public key should start with `age`...
