@@ -68,3 +68,101 @@ It is advisable to install [pre-commit](https://pre-commit.com/) and the pre-com
     ```
 
 4. Fill out the Age public key in the `.sops.yaml` under each age key (if using different ones), **note** the public key should start with `age`...
+
+### 📄 Configuration
+
+📍 The `.config.env` file contains necessary configuration that is needed by Ansible, Terraform and Flux.
+
+1. Copy the `.config.sample.env` to `.config.env` and start filling out all the environment variables.
+
+    **All are required** unless otherwise noted in the comments.
+
+    ```sh
+    cp .config.sample.env .config.env
+    ```
+
+2. Once that is done, verify the configuration is correct by running:
+
+    ```sh
+    task verify
+    ```
+
+3. If you do not encounter any errors run start having the script wire up the templated files and place them where they need to be.
+
+    ```sh
+    task configure
+    ```
+
+### ⚡ Preparing Fedora Server with Ansible
+
+📍 Here we will be running a Ansible Playbook to prepare Fedora Server for running a Kubernetes cluster.
+
+📍 Nodes are not security hardened by default, you can do this with [dev-sec/ansible-collection-hardening](https://github.com/dev-sec/ansible-collection-hardening) or similar if it supports Fedora Server.
+
+1. Ensure you are able to SSH into your nodes from your workstation using a private SSH key **without a passphrase**. This is how Ansible is able to connect to your remote nodes.
+
+   [How to configure SSH key-based authentication](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
+
+2. Install the Ansible deps
+
+    ```sh
+    task ansible:init
+    ```
+
+3. Verify Ansible can view your config
+
+    ```sh
+    task ansible:list
+    ```
+
+4. Verify Ansible can ping your nodes
+
+    ```sh
+    task ansible:ping
+    ```
+
+5. Run the Fedora Server Ansible prepare playbook
+
+    ```sh
+    task ansible:prepare
+    ```
+
+6. Reboot the nodes
+
+    ```sh
+    task ansible:reboot
+    ```
+### ⛵ Installing k3s with Ansible
+
+📍 Here we will be running a Ansible Playbook to install [k3s](https://k3s.io/) with [this](https://galaxy.ansible.com/xanmanning/k3s) wonderful k3s Ansible galaxy role. After completion, Ansible will drop a `kubeconfig` in `./provision/kubeconfig` for use with interacting with your cluster with `kubectl`.
+
+☢️ If you run into problems, you can run `task ansible:nuke` to destroy the k3s cluster and start over.
+
+1. Verify Ansible can view your config
+
+    ```sh
+    task ansible:list
+    ```
+
+2. Verify Ansible can ping your nodes
+
+    ```sh
+    task ansible:ping
+    ```
+
+3. Install k3s with Ansible
+
+    ```sh
+    task ansible:install
+    ```
+
+4. Verify the nodes are online
+
+    ```sh
+    task cluster:nodes
+    # NAME           STATUS   ROLES                       AGE     VERSION
+    # k8s-0          Ready    control-plane,master      4d20h   v1.21.5+k3s1
+    # k8s-1          Ready    worker                    4d20h   v1.21.5+k3s1
+    ```
+
+### ☁️ Configuring Cloudflare DNS with Terraform

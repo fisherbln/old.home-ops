@@ -10,9 +10,12 @@ env:
   KUBECONFIG: "{{.CLUSTER_DIR}}/local/kubeconfig"
 
 includes:
+  ansible: .taskfiles/AnsibleTasks.yml
   cluster: .taskfiles/ClusterTasks.yml
   debug: .taskfiles/DebugTasks.yml
   precommit: .taskfiles/PreCommitTasks.yml
+  terraform: .taskfiles/TerraformTasks.yml
+  sops: .taskfiles/SopsTasks.yml
   rook: .taskfiles/RookTasks.yml
   #snapshot: .taskfiles/SnapshotTasks.yml
 
