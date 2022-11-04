@@ -62,10 +62,10 @@
             state: started
     - name: User Configuration
       block:
-        - name: User Configuration | Change shell to fish
-          ansible.builtin.user:
-            name: root
-            shell: /usr/bin/fish
+        #- name: User Configuration | Change shell to fish
+        #  ansible.builtin.user:
+        #    name: root
+        #    shell: /usr/bin/fish
         - name: User Configuration | Add additional SSH public keys
           ansible.posix.authorized_key:
             user: "{{ ansible_user }}"
@@ -73,12 +73,12 @@
           loop: "{{ public_ssh_keys | default([]) }}"
     - name: System Configuration (1)
       block:
-        - name: System Configuration (1) | Configure smartd
-          ansible.builtin.copy:
-            dest: /etc/smartd.conf
-            mode: 0644
-            content: DEVICESCAN -a -o on -S on -n standby,q -s (S/../.././02|L/../../6/03) -W 4,35,40
-          notify: Restart smartd
+        #- name: System Configuration (1) | Configure smartd
+        #  ansible.builtin.copy:
+        #    dest: /etc/smartd.conf
+        #    mode: 0644
+        #    content: DEVICESCAN -a -o on -S on -n standby,q -s (S/../.././02|L/../../6/03) -W 4,35,40
+        #  notify: Restart smartd
         - name: System Configuration (1) | Disable firewalld
           ansible.builtin.systemd:
             service: firewalld.service
@@ -102,7 +102,7 @@
             content: "{{ item }}"
             dest: "/etc/modules-load.d/{{ item }}.conf"
           loop: [br_netfilter, overlay, rbd]
-        - name: System Configuration (2) | Set sysctls
+        - name: System Configuration (2) | Set sysctls  # BRIAN REALLY NEEDS TO FIGURE OUT IF THIS IS GOOD/CORRECT
           ansible.posix.sysctl:
             name: "{{ item.key }}"
             value: "{{ item.value }}"

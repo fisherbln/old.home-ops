@@ -22,7 +22,7 @@
         k3s_server_manifests_urls: []
       when: k3s_check_installed.stat.exists
 
-    - name: Create the k3s data directory
+    - name: Create the k3s data directory #Brian Needs to make sure this is good flux-cluster doesn't do this
       ansible.builtin.file:
         path: /var/lib/rancher/k3s
         state: directory
@@ -30,10 +30,10 @@
         group: root
         mode: 0755
 
-    - name: Copy audit-policy.yaml
-      ansible.builtin.template:
-        src: audit-policy.yaml.j2
-        dest: /var/lib/rancher/k3s/audit-policy.yaml
+    #- name: Copy audit-policy.yaml
+    #  ansible.builtin.template:
+    #    src: audit-policy.yaml.j2
+    #    dest: /var/lib/rancher/k3s/audit-policy.yaml
 
     - name: Install Kubernetes
       ansible.builtin.include_role:
@@ -52,7 +52,7 @@
         - k3s_control_node is defined
         - k3s_control_node
 
-    - name: Update kubeconfig with the right IPv4 address
+    - name: Update kubeconfig with the right IPv4 address #Brian --- HUH??
       delegate_to: localhost
       become: false
       run_once: true
