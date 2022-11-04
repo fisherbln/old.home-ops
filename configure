@@ -36,14 +36,14 @@ main() {
         verify_success
     else
         # generate cluster settings
-        envsubst < "${PROJECT_DIR}/tmpl/cluster/cluster-settings.yaml" \
-            > "${PROJECT_DIR}/cluster/config/cluster-settings.yaml"
-        envsubst < "${PROJECT_DIR}/tmpl/cluster/flux-cluster.yaml" \
-            > "${PROJECT_DIR}/cluster/flux/flux-system/flux-cluster.yaml"
-        if [[ "${BOOTSTRAP_KUBE_VIP_ENABLED}" == "true" ]]; then
-            envsubst < "${PROJECT_DIR}/tmpl/cluster/kube-vip-daemonset.yaml" \
-                > "${PROJECT_DIR}/cluster/apps/kube-system/kube-vip/daemon-set.yaml"
-        fi
+        #envsubst < "${PROJECT_DIR}/tmpl/cluster/cluster-settings.yaml" \
+        #    > "${PROJECT_DIR}/cluster/config/cluster-settings.yaml"
+        #envsubst < "${PROJECT_DIR}/tmpl/cluster/flux-cluster.yaml" \
+        #    > "${PROJECT_DIR}/cluster/flux/flux-system/flux-cluster.yaml"
+        #if [[ "${BOOTSTRAP_KUBE_VIP_ENABLED}" == "true" ]]; then
+        #    envsubst < "${PROJECT_DIR}/tmpl/cluster/kube-vip-daemonset.yaml" \
+        #        > "${PROJECT_DIR}/cluster/apps/kube-system/kube-vip/daemon-set.yaml"
+        #fi
         # generate cluster secrets
         envsubst < "${PROJECT_DIR}/cluster/config/.decrypted~.cluster-secrets.sops.yaml" \
             > "${PROJECT_DIR}/cluster/config/cluster-secrets.sops.yaml"
