@@ -166,3 +166,191 @@ It is advisable to install [pre-commit](https://pre-commit.com/) and the pre-com
     ```
 
 ### ☁️ Configuring Cloudflare DNS with Terraform
+
+
+
+
+
+
+
+
+
+
+### 🔹 GitOps with Flux
+
+📍 Here we will be installing [flux](https://toolkit.fluxcd.io/) after some quick bootstrap steps.
+
+1. Verify Flux can be installed
+
+    ```sh
+    task cluster:verify
+    # ► checking prerequisites
+    # ✔ kubectl 1.21.5 >=1.18.0-0
+    # ✔ Kubernetes 1.21.5+k3s1 >=1.16.0-0
+    # ✔ prerequisites checks passed
+    ```
+
+2. Push you changes to git
+
+    📍 **Verify** all the `*.sops.yaml` and `*.sops.yml` files under the `./cluster` and `./provision` folders are **encrypted** with SOPS
+
+    ```sh
+    git add -A
+    git commit -m "Initial commit :rocket:"
+    git push
+    ```
+
+3. Install Flux and sync the cluster to the Git repository
+
+    ```sh
+    task cluster:install
+    # namespace/flux-system configured
+    # customresourcedefinition.apiextensions.k8s.io/alerts.notification.toolkit.fluxcd.io created
+    ```
+
+4. Verify Flux components are running in the cluster
+
+    ```sh
+    task cluster:pods -- -n flux-system
+    # NAME                                       READY   STATUS    RESTARTS   AGE
+    # helm-controller-5bbd94c75-89sb4            1/1     Running   0          1h
+    # kustomize-controller-7b67b6b77d-nqc67      1/1     Running   0          1h
+    # notification-controller-7c46575844-k4bvr   1/1     Running   0          1h
+    # source-controller-7d6875bcb4-zqw9f         1/1     Running   0          1h
+    ```
+
+### 🎤 Verification Steps
+
+_Mic check, 1, 2_ - In a few moments applications should be lighting up like a Christmas tree 🎄
+
+You are able to run all the commands below with one task
+
+```sh
+task cluster:resources
+```
+
+1. View the Flux Git Repositories
+
+    ```sh
+    task cluster:gitrepositories
+    ```
+
+2. View the Flux kustomizations
+
+    ```sh
+    task cluster:kustomizations
+    ```
+
+3. View all the Flux Helm Releases
+
+    ```sh
+    task cluster:helmreleases
+    ```
+
+4. View all the Flux Helm Repositories
+
+    ```sh
+    task cluster:helmrepositories
+    ```
+
+5. View all the Pods
+
+    ```sh
+    task cluster:pods
+    ```
+
+6. View all the certificates and certificate requests
+
+    ```sh
+    task cluster:certificates
+    ```
+
+7. View all the ingresses
+
+    ```sh
+    task cluster:ingresses
+    ```
+
+🏆 **Congratulations** if all goes smooth you'll have a Kubernetes cluster managed by Flux, your Git repository is driving the state of your cluster.
+
+☢️ If you run into problems, you can run `task ansible:nuke` to destroy the k3s cluster and start over.
+
+🧠 Now it's time to pause and go get some coffee ☕ because next is describing how DNS is handled.
+
+## 📣 Post installation
+
+### 🔏 Authenticate Flux over SSH - Put this after running flux config
+
+Authenticating Flux to your git repository has a couple benefits like using a private git repository and/or using the Flux [Image Automation Controllers](https://fluxcd.io/docs/components/image/).
+
+By default this template only works on a public GitHub repository, it is advised to keep your repository public.
+
+The benefits of a public repository include:
+
+* Debugging or asking for help, you can provide a link to a resource you are having issues with.
+* Adding a topic to your repository of `k8s-at-home` to be included in the [k8s-at-home-search](https://whazor.github.io/k8s-at-home-search/). This search helps people discover different configurations of Helm charts across others Flux based repositories.
+
+<details>
+  <summary>Expand to read guide on adding Flux SSH authentication</summary>
+
+  1. Generate new SSH key:
+      ```sh
+      ssh-keygen -t ecdsa -b 521 -C "github-deploy-key" -f ./cluster/github-deploy-key -q -P ""
+      ```
+  2. Paste public key in the deploy keys section of your repository settings
+  3. Create sops secret in `cluster/flux/flux-system/github-deploy-key.sops.yaml` with the contents of:
+      ```yaml
+      # yamllint disable
+      apiVersion: v1
+      kind: Secret
+      metadata:
+          name: github-deploy-key
+          namespace: flux-system
+      stringData:
+          # 3a. Contents of github-deploy-key
+          identity: |
+              -----BEGIN OPENSSH PRIVATE KEY-----
+                  ...
+              -----END OPENSSH PRIVATE KEY-----
+          # 3b. Output of curl --silent https://api.github.com/meta | jq --raw-output '"github.com "+.ssh_keys[]'
+          known_hosts: |
+              github.com ssh-ed25519 ...
+              github.com ecdsa-sha2-nistp256 ...
+              github.com ssh-rsa ...
+      ```
+  4. Encrypt secret:
+      ```sh
+      sops --encrypt --in-place ./cluster/flux/flux-system/github-deploy-key.sops.yaml
+      ```
+  5. Apply secret to cluster:
+      ```sh
+      sops --decrypt cluster/flux/flux-system/github-deploy-key.sops.yaml | kubectl apply -f -
+      ```
+  6.  Update `cluster/flux/flux-system/flux-cluster.yaml`:
+      ```yaml
+      ---
+      apiVersion: source.toolkit.fluxcd.io/v1beta2
+      kind: GitRepository
+      metadata:
+        name: flux-cluster
+        namespace: flux-system
+      spec:
+        interval: 10m
+        # 6a: Change this to your user and repo names
+        url: ssh://git@github.com/$user/$repo
+        ref:
+          branch: main
+        secretRef:
+          name: github-deploy-key
+      ```
+  7. Commit and push changes
+  8. Force flux to reconcile your changes
+     ```sh
+     task cluster:reconcile
+     ```
+  9. Verify git repository is now using SSH:
+      ```sh
+      task cluster:gitrepositories
+      ```
+  10. Optionally set your repository to Private in your repository settings.
+</details>
