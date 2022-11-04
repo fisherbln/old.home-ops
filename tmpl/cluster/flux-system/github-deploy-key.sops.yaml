@@ -1,0 +1,11 @@
+# yamllint disable
+# https://github.com/k8s-at-home/template-cluster-k3s/issues/324
+apiVersion: v1
+kind: Secret
+metadata:
+    name: github-deploy-key
+    namespace: flux-system
+stringData:
+    identity: ${BOOTSTRAP_GITHUB_DEPLOYKEY_IDENTITY_SECRET}
+    known_hosts: ${BOOTSTRAP_GITHUB_DEPLOYKEY_KNOWNHOSTS_SECRET}
+    

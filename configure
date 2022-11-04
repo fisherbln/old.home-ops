@@ -38,8 +38,10 @@ main() {
         # generate cluster settings
         #envsubst < "${PROJECT_DIR}/tmpl/cluster/cluster-settings.yaml" \
         #    > "${PROJECT_DIR}/cluster/config/cluster-settings.yaml"
-        #envsubst < "${PROJECT_DIR}/tmpl/cluster/flux-cluster.yaml" \
-        #    > "${PROJECT_DIR}/cluster/flux/flux-system/flux-cluster.yaml"
+        envsubst < "${PROJECT_DIR}/tmpl/cluster/flux-cluster.yaml" \
+            > "${PROJECT_DIR}/cluster/flux/flux-system/flux-cluster.yaml"
+        envsubst < "${PROJECT_DIR}/tmpl/cluster/flux-system/github-deploy-key.sops.yaml" \
+        > "${PROJECT_DIR}/cluster/flux/flux-system/github-deploy-key.sops.yaml"
         #if [[ "${BOOTSTRAP_KUBE_VIP_ENABLED}" == "true" ]]; then
         #    envsubst < "${PROJECT_DIR}/tmpl/cluster/kube-vip-daemonset.yaml" \
         #        > "${PROJECT_DIR}/cluster/apps/kube-system/kube-vip/daemon-set.yaml"
@@ -55,6 +57,8 @@ main() {
         #    > "${PROJECT_DIR}/cluster/apps/networking/external-dns/secret.sops.yaml"
         # encrypt cluster secrets
         sops --encrypt --in-place "${PROJECT_DIR}/cluster/config/cluster-secrets.sops.yaml"
+        sops --encrypt --in-place "${PROJECT_DIR}/cluster/flux/flux-system/flux-cluster.yaml"
+        sops --encrypt --in-place "${PROJECT_DIR}/cluster/flux/flux-system/github-deploy-key.sops.yaml"
         #sops --encrypt --in-place "${PROJECT_DIR}/cluster/apps/networking/cert-manager/issuers/secret.sops.yaml"
         #sops --encrypt --in-place "${PROJECT_DIR}/cluster/apps/networking/cloudflare-ddns/secret.sops.yaml"
         #sops --encrypt --in-place "${PROJECT_DIR}/cluster/apps/networking/external-dns/secret.sops.yaml"
