@@ -30,8 +30,8 @@ generate_ansible_host_secrets() {
         printf "kind: Secret\n"
         printf "ansible_user: %s\n" "${node_username}"
         printf "ansible_become_pass: %s\n" "${node_password}"
-        printf "SECRET_PUBLIC_DOMAIN: %s\n" "{$node_public_domain}"
-        printf "SECRET_PRIVATE_DOMAIN: %s\n" "{$node_private_domain}"
+        printf "SECRET_PUBLIC_DOMAIN: %s\n" "${node_public_domain}"
+        printf "SECRET_PRIVATE_DOMAIN: %s\n" "${node_private_domain}"
     } > "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
     sops --encrypt --in-place "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
 }
