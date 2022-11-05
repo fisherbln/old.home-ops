@@ -1,7 +1,7 @@
 ---
 - hosts:
     - opnsense
-  become: false
+  become: true
   gather_facts: false
   any_errors_fatal: true
   tasks:

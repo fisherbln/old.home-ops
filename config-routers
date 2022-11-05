@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+
+# shellcheck disable=SC2155
+export PROJECT_DIR=$(git rev-parse --show-toplevel)
+
+# shellcheck disable=SC2155
+export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
+
+# shellcheck disable=SC1091
+source "${PROJECT_DIR}/.config.env"
+
+
+main() {
+
+generate_ansible_host_secrets
+success
+}
+
+generate_ansible_host_secrets() {
+    local node_id=${BOOTSTRAP_ROUTER_HOST_ADDR}
+    local node_username=${BOOTSTRAP_ROUTER_SSH_USERNAME}
+    local node_password=${BOOTSTRAP_ROUTER_SUDO_PASSWORD}
+    local node_hostname=${BOOTSTRAP_ROUTER_HOSTNAME}
+
+    {
+        printf "kind: Secret\n"
+        printf "ansible_user: %s\n" "${!node_username}"
+        printf "ansible_become_pass: %s\n" "${!node_password}"
+    } > "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
+    sops --encrypt --in-place "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
+}
+
+success() {
+    _log "INFO" "All host files have been created"
+    exit 0
+}
