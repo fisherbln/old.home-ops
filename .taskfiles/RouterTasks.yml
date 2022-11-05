@@ -20,10 +20,10 @@ tasks:
     desc: Test Ansible on router nodes
     dir: ansible/router
     cmds:
-      - ansible-playbook -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_ROUTER_PLAYBOOK_DIR}}/setup.yml
+      - ansible-playbook -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_PLAYBOOK_DIR}}/setup.yml
   
   install:
     desc: Install defined apps on router nodes
     dir: ansible/router
     cmds:
-      - ansible-playbook -i {{.ANSIBLE_ROUTER_DIR}}/hosts.yml {{.ANSIBLE_ROUTER_PLAYBOOK_DIR}}/apps.yml
+      - ansible-playbook -i {{.ANSIBLE_ROUTER_DIR}}/hosts.yml {{.ANSIBLE_PLAYBOOK_DIR}}/apps.yml
