@@ -4,7 +4,7 @@ version: "3"
 env:
   ANSIBLE_CONFIG: "{{.PROJECT_DIR}}/ansible/docker/ansible.cfg"
 
-vars:
+#vars:
   ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/docker/playbooks"
   ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/docker/inventory"
 
