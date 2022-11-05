@@ -7,7 +7,7 @@ vars:
   CLUSTER_DIR: "{{.PROJECT_DIR}}/cluster"
   ANSIBLE_DIR: "{{.PROJECT_DIR}}/ansible"
   KUBERNETES_DIR: "kernetes"  
-  DOCKER_DIR: "docker"  
+  #DOCKER_DIR: "docker"  
   ROUTER_DIR: "router"  
   TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform"
 

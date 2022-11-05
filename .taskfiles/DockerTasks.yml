@@ -6,7 +6,7 @@ env:
 
 #vars:
   ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/docker/playbooks"
-  #ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/docker/inventory"
+  ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/docker/inventory"
 
 tasks:
 
