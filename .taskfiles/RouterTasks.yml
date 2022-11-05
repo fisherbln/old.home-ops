@@ -10,19 +10,19 @@ vars:
 
 tasks:
 
-  list-routers:
+  list:
     desc: List all the router hosts
     dir: ansible/router
     cmds:
       - ansible all -i {{.ANSIBLE_ROUTER_INVENTORY_DIR}}/hosts.yml --list-hosts
 
-  router-setup:
+  setup:
     desc: Test Ansible on router nodes
     dir: ansible/router
     cmds:
       - ansible-playbook -i {{.ANSIBLE_ROUTER_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_ROUTER_PLAYBOOK_DIR}}/setup.yml
   
-  router-apps:
+  install:
     desc: Install defined apps on router nodes
     dir: ansible/router
     cmds:
