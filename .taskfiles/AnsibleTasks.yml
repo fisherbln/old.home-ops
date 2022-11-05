@@ -7,6 +7,8 @@ env:
 vars:
   ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/ansible/kubernetes/playbooks"
   ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/ansible/kubernetes/inventory"
+  ANSIBLE_ROUTER_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/ansible/router/playbooks"
+  ANSIBLE_ROUTER_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/ansible/router/inventory"
 
 tasks:
 
@@ -27,7 +29,7 @@ tasks:
     desc: List all the router hosts
     dir: ansible/router
     cmds:
-      - ansible all -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml --list-hosts
+      - ansible all -i {{.ANSIBLE_ROUTER_INVENTORY_DIR}}/hosts.yml --list-hosts
 
   prepare:
     desc: Prepare all the k8s nodes for running k3s
