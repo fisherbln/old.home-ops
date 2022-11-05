@@ -17,6 +17,7 @@ main() {
 
 generate_ansible_host_secrets
 success
+
 }
 
 generate_ansible_host_secrets() {
@@ -37,3 +38,5 @@ success() {
     _log "INFO" "All host files have been created"
     exit 0
 }
+
+main
