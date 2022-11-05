@@ -18,8 +18,14 @@ tasks:
       - ansible-galaxy collection install -r requirements.yml --collections-path ~/.ansible/collections --force
 
   list:
-    desc: List all the hosts
+    desc: List all the kubernetes hosts
     dir: ansible/kubernetes
+    cmds:
+      - ansible all -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml --list-hosts
+  
+  list-routers:
+    desc: List all the router hosts
+    dir: ansible/routers
     cmds:
       - ansible all -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml --list-hosts
 
