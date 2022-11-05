@@ -13,6 +13,7 @@ env:
 
 includes:
   ansible: .taskfiles/AnsibleTasks.yml
+  router: .taskfiles/RouterTasks.yml
   cluster: .taskfiles/ClusterTasks.yml
   debug: .taskfiles/DebugTasks.yml
   precommit: .taskfiles/PreCommitTasks.yml
