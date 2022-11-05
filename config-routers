@@ -24,11 +24,14 @@ generate_ansible_host_secrets() {
     local node_username=${BOOTSTRAP_ROUTER_SSH_USERNAME}
     local node_password=${BOOTSTRAP_ROUTER_SUDO_PASSWORD}
     local node_hostname=${BOOTSTRAP_ROUTER_HOSTNAME}
-
+    local node_public_domain=${SECRET_PUBLIC_DOMAIN}
+    local node_private_domain=${SECRET_PRIVATE_DOMAIN}
     {
         printf "kind: Secret\n"
-        printf "ansible_user: %s\n" "${!node_username}"
-        printf "ansible_become_pass: %s\n" "${!node_password}"
+        printf "ansible_user: %s\n" "${node_username}"
+        printf "ansible_become_pass: %s\n" "${node_password}"
+        printf "SECRET_PUBLIC_DOMAIN: %s\n" "{$node_public_domain}"
+        printf "SECRET_PRIVATE_DOMAIN: %s\n" "{$node_private_domain}"
     } > "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
     sops --encrypt --in-place "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
 }
