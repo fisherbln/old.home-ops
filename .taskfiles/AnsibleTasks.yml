@@ -5,10 +5,10 @@ env:
   ANSIBLE_CONFIG: "{{.PROJECT_DIR}}/ansible/kubernetes/ansible.cfg"
 
 vars:
-  ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/ansible/kubernetes/playbooks"
-  ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/ansible/kubernetes/inventory"
-  ANSIBLE_ROUTER_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/ansible/router/playbooks"
-  ANSIBLE_ROUTER_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/ansible/router/inventory"
+  ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/kubernetes/playbooks"
+  ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/kubernetes/inventory"
+  ANSIBLE_ROUTER_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/router/playbooks"
+  ANSIBLE_ROUTER_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/router/inventory"
 
 tasks:
 
