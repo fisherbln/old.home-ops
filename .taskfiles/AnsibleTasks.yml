@@ -31,6 +31,12 @@ tasks:
     cmds:
       - ansible all -i {{.ANSIBLE_ROUTER_INVENTORY_DIR}}/hosts.yml --list-hosts
 
+  router-test:
+    desc: Test Ansible on router nodes
+    dir: ansible/router
+    cmds:
+      - ansible-playbook -i {{.ANSIBLE_ROUTER_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_ROUTER_PLAYBOOK_DIR}}/setup.yml
+  
   prepare:
     desc: Prepare all the k8s nodes for running k3s
     dir: ansible/kubernetes
