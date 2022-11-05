@@ -16,7 +16,6 @@ source "${PROJECT_DIR}/.config.env"
 main() {
 
 generate_ansible_host_secrets
-success
 
 }
 
@@ -32,11 +31,6 @@ generate_ansible_host_secrets() {
         printf "ansible_become_pass: %s\n" "${!node_password}"
     } > "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
     sops --encrypt --in-place "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
-}
-
-success() {
-    _log "INFO" "All host files have been created"
-    exit 0
 }
 
 main
