@@ -25,7 +25,7 @@ tasks:
   
   list-routers:
     desc: List all the router hosts
-    dir: ansible/routers
+    dir: ansible/router
     cmds:
       - ansible all -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml --list-hosts
 
