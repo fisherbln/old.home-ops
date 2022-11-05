@@ -6,9 +6,9 @@ vars:
     sh: "git rev-parse --show-toplevel"
   CLUSTER_DIR: "{{.PROJECT_DIR}}/cluster"
   ANSIBLE_DIR: "{{.PROJECT_DIR}}/ansible"
-  KUBERNETES_DIR: "kernetes"  
+  #KUBERNETES_DIR: "kernetes"  
   #DOCKER_DIR: "docker"  
-  ROUTER_DIR: "router"  
+  #ROUTER_DIR: "router"  
   TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform"
 
 env:
@@ -16,8 +16,8 @@ env:
 
 includes:
   ansible: .taskfiles/AnsibleTasks.yml
-  router: .taskfiles/RouterTasks.yml
-  docker: .taskfiles/DockerTasks.yml
+  #router: .taskfiles/RouterTasks.yml
+  #docker: .taskfiles/DockerTasks.yml
   cluster: .taskfiles/ClusterTasks.yml
   debug: .taskfiles/DebugTasks.yml
   precommit: .taskfiles/PreCommitTasks.yml
