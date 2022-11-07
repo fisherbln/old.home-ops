@@ -4,7 +4,7 @@ version: "3"
 env:
   ANSIBLE_CONFIG: "{{.PROJECT_DIR}}/ansible/kubernetes/ansible.cfg"
 
-#vars:
+vars:
   ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/kubernetes/playbooks"
   ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/kubernetes/inventory"
 
@@ -21,7 +21,7 @@ tasks:
     desc: List all the kubernetes hosts
     dir: ansible/kubernetes
     cmds:
-      - ansible all -i {{.ANSIBLE_INVENTORY_DIR}}/"/hosts.yml --list-hosts
+      - ansible all -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml --list-hosts
     
   prepare:
     desc: Prepare all the k8s nodes for running k3s
