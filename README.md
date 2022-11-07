@@ -354,3 +354,72 @@ The benefits of a public repository include:
       ```
   10. Optionally set your repository to Private in your repository settings.
 </details>
+
+
+
+### 🔏 Setting up OPNSense Router to have some Fun
+
+BGP Setup:
+I'm using opnSense as my primary router. Below are some notes on setting that up on there
+    Walkthrough on basics: https://forum.opnsense.org/index.php?topic=15756.0
+    Install ffr-plugin on OpnSense
+    Enable both Routing and BGPv4 from OpnSense admin gui
+    Configure BGPv4 as follows (edit AS number as needed):
+        Enable: Check
+        BGP AS Number: 64512
+
+Build 2 New VLANS - 
+    NET_NODE_CIDR Network (/24)
+    NET_EIP_CIDR Network (/24)
+    Setup Firewall Rules
+        I'm allowing all between NET_NODE_CIDR and my primary LAN
+        For now, I'm also allowing all between NET_EIP_CIDR Network and my LAN, but this will get locked down later
+
+Install OS-FRR
+
+<details>
+  <summary>Expand to read guide on IPV6 Setup with ATT to get more than a /64 out the network:</summary>
+
+Got this from: https://forums.att.com/conversations/att-fiber-account/ipv6-prefix-delegation/5e6309f2c17a0663de2c0532
+
+I'm up and running now with both native and tunnel routing for IPv6 using OpenWrt and have finally two subnets with correct v6 addressing.
+
+LAN has
+
+option ip6hint '000a'
+
+GUEST has
+
+option ip6hint '000b'
+
+I skipped using 192.168.1.0/24 because that routes to the BGW320 for its web interface at 192.168.1.254
+
+I still demand my /56
+
+Here's the /etc/config/network settings
+
+config interface 'wan6tun'
+	option proto '6rd'
+	option iface6rd 'wan'
+	option peeraddr '12.83.49.81'
+	option ip6prefixlen '60'
+	option mtu '1480'
+	option ip6prefix '2602:30x:xxxx:xxx0::'
+	option ip4prefixlen '32'
+
+config interface 'wan6native'
+	option ifname 'eth1.2'
+	option proto 'dhcpv6'
+	option reqaddress 'try'
+	option peerdns '0'
+	list dns '2001:4860:4860::8888'
+	list dns '2001:4860:4860::8844'
+	option reqprefix '56'     # maybe one day we'll finally get a /56
+
+The tunnel should auto-config from a DHCP option, but AT&T doesn't advertise it so you'll need to calculate your addy
+
+@OpenWrt:~# V4L=69.209.xx.xx
+@OpenWrt:~# echo $V4L | awk -F. '{ t=sprintf("%02x%02x%02x%02x", $1, $2, $3, $4); print "2602:30"substr(t,1,1)":"substr(t,2,4)":"substr(t,6)"0::" }'
+2602:30x:xxxx:xxx0::
+@OpenWrt:~#
+</details>
