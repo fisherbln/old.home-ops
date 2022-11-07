@@ -5,12 +5,11 @@ env:
   ANSIBLE_CONFIG: "{{.PROJECT_DIR}}/ansible/kubernetes/ansible.cfg"
 
 
-  vars:
-    ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/kubernetes/playbooks"
-    ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/kubernetes/inventory"
+vars:
+  ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/kubernetes/playbooks"
+  ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/kubernetes/inventory"
 
 tasks:
-
 
   init:
     desc: Install / Upgrade Ansible galaxy deps

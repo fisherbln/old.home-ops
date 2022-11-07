@@ -10,9 +10,6 @@ vars:
 
 tasks:
 
-  env:
-    ANSIBLE_ROUTER_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/router/playbooks"
-    ANSIBLE_ROUTER_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/router/inventory"
   list:
     desc: List all the router hosts
     dir: ansible/router
