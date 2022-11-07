@@ -8,7 +8,7 @@ vars:
   ANSIBLE_DIR: "{{.PROJECT_DIR}}/ansible"
   #KUBERNETES_DIR: "kernetes"  
   #DOCKER_DIR: "docker"  
-  ROUTER_DIR: "router"  
+  ROUTER_DIR: "{{.PROJECT_DIR}}/router"  
   TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform"
 
 env:
