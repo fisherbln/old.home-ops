@@ -4,8 +4,9 @@ version: "3"
 env:
   ANSIBLE_CONFIG: "{{.PROJECT_DIR}}/ansible/router/ansible.cfg"
 
-#vars:
-  
+vars:
+  ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/router/playbooks"
+  ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/router/inventory"
 
 tasks:
   env:
