@@ -22,12 +22,14 @@
         k3s_server_manifests_urls: []
       when: k3s_check_installed.stat.exists
 
-    - name: Create the k3s data directory #Brian Needs to make sure this is good flux-cluster doesn't do this
+    - name: Create the k3s data directory #Brian Needs to make sure this is good flux-cluster doesn't do this. Brian switched below to his UID instead of root
       ansible.builtin.file:
         path: /var/lib/rancher/k3s
         state: directory
-        owner: root
-        group: root
+        owner: brian
+        group: brian
+        #owner: root
+        #group: root
         mode: 0755
 
     #- name: Copy audit-policy.yaml
