@@ -45,17 +45,18 @@ generate_ansible_host_secrets() {
     local node_control=
     local node_hostname=
     local test_var
-    for var in "${!BOOTSTRAP_ANSIBLE_HOST_ADDR_@}"; do
-        test_var="BOOTSTRAP_ANSIBLE_HOSTNAME_${!var}"
+    #for var in "${!BOOTSTRAP_ANSIBLE_HOST_ADDR_@}"; do
+    for (( c=0; c<=5; c++ ))
+        test_var="BOOTSTRAP_ANSIBLE_HOSTNAME_${!c}"
         node_control="${!test_var}"
-        test_var="BOOTSTRAP_CONTROL_NODE_${!var}"
+        test_var="BOOTSTRAP_CONTROL_NODE_${!c}"
         node_hostname="${!test_var}"
         {
         printf "kind: Secret\n"
         printf "ansible_user: %s\n" "${node_username}"
         printf "ansible_become_pass: %s\n" "${node_password}"                
-        } > "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${!var}.sops.yml"
-            sops --encrypt --in-place "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${!var}.sops.yml"
+        } > "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${!c}.sops.yml"
+            sops --encrypt --in-place "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${!c}.sops.yml"
         node_id=$((node_id+1))
     done
 }
