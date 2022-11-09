@@ -44,10 +44,14 @@ generate_ansible_host_secrets() {
     local node_password=${BOOTSTRAP_ANSIBLE_SUDO_PASSWORD}
     local node_control=
     local node_hostname=
+    local test_var
     for var in "${!BOOTSTRAP_ANSIBLE_HOST_ADDR_@}"; do
         #node_id=$(echo "${var}" | awk -F"_" '{print $5}')
-        node_control="${!BOOTSTRAP_ANSIBLE_CONTROL_NODE_${node_id}}"
-        node_hostname="${!BOOTSTRAP_ANSIBLE_HOSTNAME_${node_id}}"
+    #node_hostname="BOOTSTRAP_ANSIBLE_HOSTNAME_${node_id}"
+    #host_key="${!node_hostname:-${default_worker_node_prefix}}"
+        test_var="BOOTSTRAP_ANSIBLE_HOSTNAME_${node_id}"
+        node_control="${!test_var}"
+        node_hostname="${!test_var}"
         {
         printf "kind: Secret\n"
         printf "ansible_user: %s\n" "${node_username}"
