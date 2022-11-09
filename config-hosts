@@ -36,7 +36,7 @@ generate_ansible_router_secrets() {
     } > "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
     sops --encrypt --in-place "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
 }
-                host_key="${!node_hostname:-${default_control_node_prefix}}"
+
 generate_ansible_host_secrets() {
     #local node_count=0
     local node_id=0
