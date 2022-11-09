@@ -46,7 +46,7 @@ generate_ansible_host_secrets() {
     local node_hostname=
     local test_var
     #for var in "${!BOOTSTRAP_ANSIBLE_HOST_ADDR_@}"; do
-    for (( c=0; c<=5; c++ ))
+    for (( c=0; c<=5; c++ )) do
         test_var="BOOTSTRAP_ANSIBLE_HOSTNAME_${!c}"
         node_control="${!test_var}"
         test_var="BOOTSTRAP_CONTROL_NODE_${!c}"
