@@ -51,13 +51,13 @@ main() {
         envsubst < "${PROJECT_DIR}/tmpl/external-dns-secret.sops.yaml" \
             > "${PROJECT_DIR}/cluster/apps/networking/external-dns/secret.sops.yaml"
         envsubst < "${PROJECT_DIR}/tmpl/k3s.sops.yml" \
-            > "${PROJECT_DIR}/kubernetes/inventory/group_vars/all/k3s.sops.yaml"
+            > "${PROJECT_DIR}/ansible/kubernetes/inventory/group_vars/all/k3s.sops.yml"
         
         # encrypt cluster secrets
         sops --encrypt --in-place "${PROJECT_DIR}/cluster/flux/vars/cluster-secrets.sops.yaml"
         sops --encrypt --in-place "${PROJECT_DIR}/cluster/flux/vars/github-deploy-key.sops.yaml"
         sops --encrypt --in-place "${PROJECT_DIR}/cluster/apps/networking/external-dns/secret.sops.yaml"
-        sops --encrypt --in-place "${PROJECT_DIR}/kubernetes/inventory/group_vars/all/k3s.sops.yaml"
+        sops --encrypt --in-place "${PROJECT_DIR}/ansible/kubernetes/inventory/group_vars/all/k3s.sops.yml"
         
         # generate terraform secrets
         #envsubst < "${PROJECT_DIR}/terraform/cloudflare/.decrypted~.secret.sops.yaml" \
