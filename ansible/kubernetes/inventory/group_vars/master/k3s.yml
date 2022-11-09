@@ -15,7 +15,7 @@ k3s_server:
   flannel-backend: "none" # This needs to be in quotes
   disable:
     - flannel
-    #- traefik
+    - traefik
     - servicelb
     - metrics-server
     - local-storage

@@ -1,4 +1,3 @@
-### Brian needs to update this to the bbox network
 ---
 #
 # Below vars are for the xanmanning.k3s role
@@ -31,7 +30,7 @@ k3s_use_unsupported_config: false
 # this is set to my haproxy address running on my router.
 # If you want to use kube-vip only
 # set this to "{{ kubevip_address }}"
-#k3s_registration_address: 192.168.1.1
+#k3s_registration_address: 192.168.1.1 #BRIAN changed this to below
 k3s_registration_address: {{ kubevip_address }}
 
 # # /etc/rancher/k3s/config.yaml.d
@@ -46,7 +45,6 @@ k3s_server_manifests_templates:
   - "calico-bgppeer.yaml.j2"
 
 # -- /var/lib/rancher/k3s/server/manifests
-# Brian: this is the install for calico
 k3s_server_manifests_urls:
   - url: https://docs.projectcalico.org/archive/v3.23/manifests/tigera-operator.yaml
     filename: tigera-operator.yaml

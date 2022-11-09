@@ -36,38 +36,36 @@ main() {
         verify_success
     else
         # generate cluster settings
-        #envsubst < "${PROJECT_DIR}/tmpl/cluster/cluster-settings.yaml" \
-        #    > "${PROJECT_DIR}/cluster/config/cluster-settings.yaml"
-        envsubst < "${PROJECT_DIR}/tmpl/cluster/flux-cluster.yaml" \
-            > "${PROJECT_DIR}/cluster/flux/flux-system/flux-cluster.yaml"
-        envsubst < "${PROJECT_DIR}/tmpl/cluster/flux-system/github-deploy-key.sops.yaml" \
-        > "${PROJECT_DIR}/cluster/flux/flux-system/github-deploy-key.sops.yaml"
+        envsubst < "${PROJECT_DIR}/tmpl/cluster/github-deploy-key.sops.yaml" \
+        > "${PROJECT_DIR}/cluster/flux/vars/github-deploy-key.sops.yaml"
+        
+        #BRIAN NOT SURE IF HE NEEDS TO DO SOMETHING HERE
         #if [[ "${BOOTSTRAP_KUBE_VIP_ENABLED}" == "true" ]]; then
         #    envsubst < "${PROJECT_DIR}/tmpl/cluster/kube-vip-daemonset.yaml" \
         #        > "${PROJECT_DIR}/cluster/apps/kube-system/kube-vip/daemon-set.yaml"
         #fi
+
         # generate cluster secrets
-        envsubst < "${PROJECT_DIR}/cluster/config/.decrypted~.cluster-secrets.sops.yaml" \
-            > "${PROJECT_DIR}/cluster/config/cluster-secrets.sops.yaml"
-        #envsubst < "${PROJECT_DIR}/local/cert-manager-secret.sops.yaml" \
-        #    > "${PROJECT_DIR}/cluster/apps/networking/cert-manager/issuers/secret.sops.yaml"
-        #envsubst < "${PROJECT_DIR}/local/cloudflare-ddns-secret.sops.yaml" \
-        #    > "${PROJECT_DIR}/cluster/apps/networking/cloudflare-ddns/secret.sops.yaml"
-        envsubst < "${PROJECT_DIR}/tmpl/cluster/external-dns-secret.sops.yaml" \
+        envsubst < "${PROJECT_DIR}/tmpl/cluster-secret.sops.yaml" \
+            > "${PROJECT_DIR}/cluster/flux/vars/cluster-secrets.sops.yaml"
+        envsubst < "${PROJECT_DIR}/tmpl/external-dns-secret.sops.yaml" \
             > "${PROJECT_DIR}/cluster/apps/networking/external-dns/secret.sops.yaml"
+        envsubst < "${PROJECT_DIR}/tmpl/k3s.sops.yaml" \
+            > "${PROJECT_DIR}/kubernetes/inventory/group_vars/all/k3s.sops.yaml"
         
         # encrypt cluster secrets
-        sops --encrypt --in-place "${PROJECT_DIR}/cluster/config/cluster-secrets.sops.yaml"
-        sops --encrypt --in-place "${PROJECT_DIR}/cluster/flux/flux-system/flux-cluster.yaml"
-        sops --encrypt --in-place "${PROJECT_DIR}/cluster/flux/flux-system/github-deploy-key.sops.yaml"
-        #sops --encrypt --in-place "${PROJECT_DIR}/cluster/apps/networking/cert-manager/issuers/secret.sops.yaml"
-        #sops --encrypt --in-place "${PROJECT_DIR}/cluster/apps/networking/cloudflare-ddns/secret.sops.yaml"
+        sops --encrypt --in-place "${PROJECT_DIR}/cluster/flux/vars/cluster-secrets.sops.yaml"
+        sops --encrypt --in-place "${PROJECT_DIR}/cluster/flux/vars/github-deploy-key.sops.yaml"
         sops --encrypt --in-place "${PROJECT_DIR}/cluster/apps/networking/external-dns/secret.sops.yaml"
+        sops --encrypt --in-place "${PROJECT_DIR}/kubernetes/inventory/group_vars/all/k3s.sops.yaml"
+        
         # generate terraform secrets
-        envsubst < "${PROJECT_DIR}/terraform/cloudflare/.decrypted~.secret.sops.yaml" \
-            > "${PROJECT_DIR}/terraform/cloudflare/secret.sops.yaml"
+        #envsubst < "${PROJECT_DIR}/terraform/cloudflare/.decrypted~.secret.sops.yaml" \
+        #    > "${PROJECT_DIR}/terraform/cloudflare/secret.sops.yaml"
+        
         # encrypt terraform secrets
-        sops --encrypt --in-place "${PROJECT_DIR}/terraform/cloudflare/secret.sops.yaml"
+        #sops --encrypt --in-place "${PROJECT_DIR}/terraform/cloudflare/secret.sops.yaml"
+        
         # generate ansible settings
         # BRIAN - Not sure what to do on the kube-vip script front. Do I need this?
         #envsubst < "${PROJECT_DIR}/tmpl/ansible/kube-vip.yml" \

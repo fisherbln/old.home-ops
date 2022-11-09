@@ -7,10 +7,10 @@ metadata:
 spec:
   interval: 30m
   dependsOn:
-    - name: charts
-    - name: config
+    - name: flux-installation
+    - name: flux-cluster
   path: ./cluster/apps
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-cluster
@@ -22,5 +22,7 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: cluster-settings
+        optional: false
       - kind: Secret
         name: cluster-secrets
+        optional: false
