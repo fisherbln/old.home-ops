@@ -50,7 +50,7 @@ main() {
             > "${PROJECT_DIR}/cluster/flux/vars/cluster-secrets.sops.yaml"
         envsubst < "${PROJECT_DIR}/tmpl/external-dns-secret.sops.yaml" \
             > "${PROJECT_DIR}/cluster/apps/networking/external-dns/secret.sops.yaml"
-        envsubst < "${PROJECT_DIR}/tmpl/k3s.sops.yaml" \
+        envsubst < "${PROJECT_DIR}/tmpl/k3s.sops.yml" \
             > "${PROJECT_DIR}/kubernetes/inventory/group_vars/all/k3s.sops.yaml"
         
         # encrypt cluster secrets
