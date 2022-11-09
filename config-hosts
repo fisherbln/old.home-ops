@@ -15,21 +15,51 @@ source "${PROJECT_DIR}/.config.env"
 
 main() {
 
+generate_ansible_router_secrets
 generate_ansible_host_secrets
 
 }
 
-generate_ansible_host_secrets() {
-    local node_id=${BOOTSTRAP_HOST_ADDR}
-    local node_username=${BOOTSTRAP_SSH_USERNAME}
-    local node_password=${BOOTSTRAP_SUDO_PASSWORD}
-    local node_hostname=${BOOTSTRAP_HOSTNAME}
+generate_ansible_router_secrets() {
+    local node_id=${BOOTSTRAP_ROUTER_HOST_ADDR}
+    local node_username=${BOOTSTRAP_ROUTER_SSH_USERNAME}
+    local node_password=${BOOTSTRAP_ROUTER_SUDO_PASSWORD}
+    local node_hostname=${BOOTSTRAP_ROUTER_HOSTNAME}
+    local node_public_domain=${SECRET_PUBLIC_DOMAIN}
+    local node_private_domain=${SECRET_PRIVATE_DOMAIN}
     {
         printf "kind: Secret\n"
         printf "ansible_user: %s\n" "${node_username}"
         printf "ansible_become_pass: %s\n" "${node_password}"
-    } > "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${node_hostname}.sops.yml"
+        printf "SECRET_PUBLIC_DOMAIN: %s\n" "${node_public_domain}"
+        printf "SECRET_PRIVATE_DOMAIN: %s\n" "${node_private_domain}"
+    } > "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
     sops --encrypt --in-place "${PROJECT_DIR}/ansible/router/inventory/host_vars/${node_hostname}.sops.yml"
+}
+
+generate_ansible_host_secrets() {
+    local node_count=
+    local node_id=
+    local node_username=
+    local node_password=
+    local node_hostname=
+    local node_control=
+    {
+        node_count=0
+        for var in "${!BOOTSTRAP_ANSIBLE_HOST_ADDR_@}"; do
+            node_count=$((node_count+1))
+            node_id=$(echo "${var}" | awk -F"_" '{print $5}')
+            node_control="BOOTSTRAP_ANSIBLE_CONTROL_NODE_${node_id}"
+            node_hostname="BOOTSTRAP_ANSIBLE_HOSTNAME_${node_id}"
+            host_key="${!node_hostname:-${default_worker_node_prefix}}"
+            node_username="BOOTSTRAP_ANSIBLE_SSH_USERNAME"
+            node_password="BOOTSTRAP_ANSIBLE_SUDO_PASSWORD"
+            printf "kind: Secret\n"
+            printf "ansible_user: %s\n" "${!node_username}"
+            printf "ansible_become_pass: %s\n" "${!node_password}"
+            } > "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${node_hostname}.sops.yml"
+            sops --encrypt --in-place "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${node_hostname}.sops.yml"
+        done
 }
 
 main
