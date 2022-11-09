@@ -53,7 +53,7 @@ generate_ansible_host_secrets() {
         printf "ansible_become_pass: %s\n" "${!node_password}"                
         } > "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${node_hostname}.sops.yml"
             sops --encrypt --in-place "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${node_hostname}.sops.yml"
-        node_id = $((node_id+1))
+        node_id=$((node_id+1))
     done
 }
 
