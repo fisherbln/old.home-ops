@@ -38,13 +38,13 @@ generate_ansible_router_secrets() {
 }
 
 generate_ansible_host_secrets() {
-    local node_count=0
-    local node_id=
+    #local node_count=0
+    local node_id=0
     local node_username=${BOOTSTRAP_ANSIBLE_SSH_USERNAME}
     local node_password=${BOOTSTRAP_ANSIBLE_SUDO_PASSWORD}
     local node_hostname=
     for var in "${!BOOTSTRAP_ANSIBLE_HOST_ADDR_@}"; do
-        node_id=$(echo "${var}" | awk -F"_" '{print $5}')
+        #node_id=$(echo "${var}" | awk -F"_" '{print $5}')
         node_control="BOOTSTRAP_ANSIBLE_CONTROL_NODE_${node_id}"
         node_hostname="BOOTSTRAP_ANSIBLE_HOSTNAME_${node_id}"
         {
@@ -53,7 +53,7 @@ generate_ansible_host_secrets() {
         printf "ansible_become_pass: %s\n" "${!node_password}"                
         } > "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${node_hostname}.sops.yml"
             sops --encrypt --in-place "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${node_hostname}.sops.yml"
-    
+        node_id = $(node_id+1)
     done
 
 }
