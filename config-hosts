@@ -50,7 +50,7 @@ generate_ansible_host_secrets() {
         node_id=$(echo "${var}" | awk -F"_" '{print $5}')
         node_hostname="BOOTSTRAP_ANSIBLE_HOSTNAME_${node_id}"
         node_hostname=${!node_hostname}
-        echo ${node_hostname}
+        echo "creating sops.yml for: "${node_hostname}
         {
         printf "kind: Secret\n"
         printf "ansible_user: %s\n" "${node_username}"
