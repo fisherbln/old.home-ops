@@ -45,19 +45,19 @@ generate_ansible_host_secrets() {
     local node_control=
     local node_hostname=
     local test_var=
-    #for var in "${!BOOTSTRAP_ANSIBLE_HOST_ADDR_@}"; do
-    for (( c=0; c<=5; c++ )) do
-        test_var="BOOTSTRAP_ANSIBLE_HOSTNAME_${node_id}"
-        node_control="${!test_var}"
-        test_var="BOOTSTRAP_CONTROL_NODE_${node_id}"
-        node_hostname="${!test_var}"
+
+    for var in "${!BOOTSTRAP_ANSIBLE_HOST_ADDR_@}"; do
+        node_id=$(echo "${var}" | awk -F"_" '{print $5}')
+        node_hostname="BOOTSTRAP_ANSIBLE_HOSTNAME_${node_id}"
+        node_hostname=${!node_hostname}
+        echo ${node_hostname}
         {
         printf "kind: Secret\n"
         printf "ansible_user: %s\n" "${node_username}"
-        printf "ansible_become_pass: %s\n" "${node_password}"                
-        } > "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/k8s${node_hostname}.sops.yml"
-            sops --encrypt --in-place "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/k8s${node_hostname}.sops.yml"
-        node_id=$((node_id+1))
+        printf "ansible_become_pass: %s\n" "${node_password}"
+        } > "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${node_hostname}.sops.yml"
+            sops --encrypt --in-place "${PROJECT_DIR}/ansible/kubernetes/inventory/host_vars/${node_hostname}.sops.yml"
+            node_id=$((node_id+1))
     done
 }
 
